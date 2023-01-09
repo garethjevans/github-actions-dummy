@@ -77,10 +77,12 @@ jobs:
           echo "Pushing Updating Tag"
           git push origin refs/tags/${{ steps.prep.outputs.version }}
           gh api -X PATCH -F draft=false -F sha=$COMMIT /repos/$GITHUB_REPOSITORY/releases/$RELEASE
-          
-          echo "Deleting Tag ${{ steps.prep.outputs.majorversion }}"
-          git push origin :${{ steps.prep.outputs.majorversion }}
-          echo "Retagging ${{ steps.prep.outputs.majorversion }}"
+         
+          if [ $(git tag -l "${{ steps.prep.outputs.majorversion }}") ]; then
+            echo "Deleting Tag ${{ steps.prep.outputs.majorversion }}"
+            git push origin :${{ steps.prep.outputs.majorversion }}
+          fi 
+          echo "(Re)tagging ${{ steps.prep.outputs.majorversion }}"
           git tag -f -a ${{ steps.prep.outputs.majorversion }} -m "${{ steps.prep.outputs.majorversion }}" ${COMMIT}
           echo "Pushing Updating Tag"
           git push origin refs/tags/${{ steps.prep.outputs.majorversion }}
