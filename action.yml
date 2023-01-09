@@ -8,5 +8,5 @@ inputs:
 outputs:
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/garethjevans/github-actions-dummy:main'
+  image: 'docker://ghcr.io/garethjevans/github-actions-dummy:v0.0.7'
   entrypoint: 'github-actions-entrypoint.sh'
