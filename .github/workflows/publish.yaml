@@ -7,7 +7,6 @@ on:
 
 jobs:
   default:
-    name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
 
     steps:
@@ -69,4 +68,9 @@ jobs:
             VERSION=${{ steps.prep.outputs.version }}
 
       - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}    
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Validate
+        run: |
+          DOCKER_IMAGE=$(cat action.yml | yq .runs.image | sed 's|docker://||')
+          docker pull $DOCKER_IMAGE
