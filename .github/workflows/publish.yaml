@@ -1,4 +1,4 @@
-name: Build and Publish
+name: Publish
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:  
 
 jobs:
-  build-and-push-docker-image:
+  default:
     name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
 
