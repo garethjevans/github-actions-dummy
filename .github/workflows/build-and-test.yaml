@@ -1,0 +1,17 @@
+---
+name: build-and-test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:      
+
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
