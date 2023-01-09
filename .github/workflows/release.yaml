@@ -17,19 +17,10 @@ jobs:
         id: prep
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
+          MAJOR_VERSION=$(echo $VERSION | sed 's/\.[[:digit:]]\+\.[[:digit:]]\+$//')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "majorversion=${MAJOR_VERSION}" >> $GITHUB_OUTPUT
           echo "image=ghcr.io/${{ github.repository }}" >> $GITHUB_OUTPUT
-
-      - name: Generate Docker metadata
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ghcr.io/${{ github.repository }}
-          tags: |
-            type=semver,pattern=v{{version}}
-          flavor: |
-            latest=false
 
       - name: Set up Docker Buildx
         id: buildx
@@ -48,7 +39,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.prep.outputs.image }}:${{ steps.prep.outputs.version }}
           platforms: linux/amd64
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
