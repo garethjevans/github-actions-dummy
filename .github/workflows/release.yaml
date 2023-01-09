@@ -27,12 +27,9 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern=v{{version}}
           flavor: |
-            latest=true
+            latest=false
 
       - name: Set up Docker Buildx
         id: buildx
