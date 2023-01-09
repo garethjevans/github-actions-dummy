@@ -70,13 +70,20 @@ jobs:
           git commit -m "chore: update action.yml reference to ${{ steps.prep.outputs.version }}"
           COMMIT=$(git rev-parse --short HEAD)
           echo "Current commit is ${COMMIT}"
-          echo "Deleting Tag"
+          echo "Deleting Tag ${{ steps.prep.outputs.version }}"
           git push origin :${{ steps.prep.outputs.version }}
-          echo "Retagging"
+          echo "Retagging ${{ steps.prep.outputs.version }}"
           git tag -f -a ${{ steps.prep.outputs.version }} -m "${{ steps.prep.outputs.version }}" ${COMMIT}
           echo "Pushing Updating Tag"
           git push origin refs/tags/${{ steps.prep.outputs.version }}
           gh api -X PATCH -F draft=false -F sha=$COMMIT /repos/$GITHUB_REPOSITORY/releases/$RELEASE
+          
+          echo "Deleting Tag ${{ steps.prep.outputs.majorversion }}"
+          git push origin :${{ steps.prep.outputs.majorversion }}
+          echo "Retagging ${{ steps.prep.outputs.majorversion }}"
+          git tag -f -a ${{ steps.prep.outputs.majorversion }} -m "${{ steps.prep.outputs.majorversion }}" ${COMMIT}
+          echo "Pushing Updating Tag"
+          git push origin refs/tags/${{ steps.prep.outputs.majorversion }}
         env:
           GIT_COMMITTER_NAME: ${{ github.actor }}
           GIT_COMMITTER_EMAIL: ${{ github.actor }}@users.noreply.github.com
