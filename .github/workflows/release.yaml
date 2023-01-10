@@ -20,6 +20,13 @@ jobs:
 
           VERSION=${GITHUB_REF#refs/tags/}
           MAJOR_VERSION=$(echo $VERSION | sed 's/\.[[:digit:]]\+\.[[:digit:]]\+$//')
+          TEST_CHECK=$(echo $VERSION | sed 's/^v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+$/xxx/')
+
+          if [ "$TEST_CHECK" != "xxx" ];
+            echo "Version $VERSION does not match expected format vMAJOR.MINOR.PATCH"
+            exit 1
+          fi
+
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "majorversion=${MAJOR_VERSION}" >> $GITHUB_OUTPUT
           echo "image=ghcr.io/${{ github.repository }}" >> $GITHUB_OUTPUT
